@@ -41,17 +41,23 @@ async def geometry_filter(geometry_string: str = None):
 
     db_query = '''
     SELECT jsonb_build_object(
-        'type', 'Feature',
-        'id', objectid,
-        'geometry', ST_AsGeoJSON(ST_Transform(a.wkb_geometry, 4326))::jsonb,
-        'properties', to_jsonb(a) - 'objectid' - 'linrefx' - 'linrefy' - \
-            'xgcswgs84' - 'ygcswgs84' - 'wkb_geometry' - 'uidentstla' - 'ogc_fid'
+        'type', 'FeatureCollection',
+        'center', COUNT(fc),
+        'features', jsonb_agg(fc.feature)
     )
-    FROM postgis_unfallorte as a
-    JOIN postgis_verwaltungsgebiete as v
-    ON ST_WITHIN(a.wkb_geometry, v.wkb_geometry)
-    WHERE v.gen = %(geometry_string)s
-    AND a.ustrzustan = '1';
+    FROM (
+        SELECT jsonb_build_object(
+            'type', 'Feature',
+            'id', objectid,
+            'geometry', ST_AsGeoJSON(ST_Transform(a.wkb_geometry, 4326))::jsonb,
+            'properties', to_jsonb(a) - 'objectid' - 'linrefx' - 'linrefy' - \
+            'xgcswgs84' - 'ygcswgs84' - 'wkb_geometry' - 'uidentstla' - 'ogc_fid'
+        ) AS feature
+        FROM postgis_unfallorte AS a
+        JOIN postgis_verwaltungsgebiete AS v
+        ON ST_WITHIN(a.wkb_geometry, v.wkb_geometry)
+        WHERE v.gen = %(geometry_string)s
+    ) AS fc;
     '''
 
     # execute the query safely
