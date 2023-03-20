@@ -63,4 +63,9 @@ async def geometry_filter(geometry_string: str = None):
     # execute the query safely
     cur.execute(db_query, {'geometry_string': geometry_string})
 
-    return cur.fetchall()
+    results = cur.fetchall()
+
+    if len(results) > 0:
+        return results[0]
+    else:
+        return {}
