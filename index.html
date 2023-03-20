@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Open Accident Map - Deutschland</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <link crossorigin="" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          rel="stylesheet">
+    <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+</head>
+<body>
+<div class="h-screen md:flex overflow-auto">
+    <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 h-96 sm:h-screen overflow-hidden" id="map"></div>
+    <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:h-screen sm:overflow-scroll bg-gray-100" id="filter">
+        <div class="bg-gray-300">
+            <div class="hidden py-2 px-3" id="details">
+                <div class="font-bold">Unfallart</div>
+                <div class="mb-2" id="uart"></div>
+                <div class="font-bold">Unfallkategorie</div>
+                <div class="mb-2" id="ukategorie"></div>
+                <div class="font-bold">Unfalltyp</div>
+                <div class="mb-2" id="utyp1"></div>
+                <div class="font-bold">Lichtverhältnisse</div>
+                <div class="mb-2" id="ulichtverh"></div>
+                <div class="font-bold">Straßenzustand</div>
+                <div class="mb-2" id="ustrzustan"></div>
+                <div class="font-bold">Unfall mit Rad</div>
+                <div class="mb-2" id="istrad"></div>
+                <div class="font-bold">Unfall mit Pkw</div>
+                <div class="mb-2" id="istpkw"></div>
+                <div class="font-bold">Unfall mit Güterkraftfahrzeug</div>
+                <div class="mb-2" id="istgkfz"></div>
+                <div class="font-bold">Unfall mit Kraftrad</div>
+                <div class="mb-2" id="istkrad"></div>
+                <div class="font-bold">Unfall mit Sonstigen</div>
+                <div class="mb-2" id="istsonstig"></div>
+                <div class="font-bold">Unfall mit Fußgänger</div>
+                <div id="istfuss"></div>
+            </div>
+        </div>
+        <div class="py-2 px-3">
+            <h1 class="text-2xl md:text-3xl font-bold">
+                Open Accident Map
+            </h1>
+            <h2 class="text-xl md:text-2xl mb-4 md:mb-8">
+                Licence
+            </h2>
+            <h3 class="text-xl md:text-2xl mb-1 md:mb-3">
+                Datenquelle
+            </h3>
+            <p class="font-mono mb-4 md:mb-8">tbd.</p>
+            <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Interaktive Karte</h3>
+            <p class="font-mono mb-4 md:mb-8">Während einer kleinen Programmierarbeit ist diese interaktive webbasierte
+                Karte mit den Daten des Bundesamt für Kartographie und Geodäsie entstanden. Nach einigen Stunden der maschinellen
+                Aufarbeitung und Betrachtung der Datensätze haben wir uns
+                entschloßen die Daten in eine Posgis Postgres Datenbank
+                einzupflegen und zu indexieren
+                Unser Ziel ist es Entscheidungsträgern in Kommunen,
+                Verwaltungen und auch privaten Unternehmen eine Datenbasierte
+                Entscheidung anhand von den Daten und Ereignissen zu treffen.
+            </p>
+            <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Quellcode</h3>
+            <p class="font-mono"><a class="text-blue-600 hover:text-blue-500 focus:text-blue:500"
+                                    href="https://github.com/p3t3r67x0/open-accident-map"
+                                    target="_blank">GitHub</a>
+            </p>
+        </div>
+    </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
