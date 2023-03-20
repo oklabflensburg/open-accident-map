@@ -26,6 +26,8 @@ sudo apt install postgis postgresql-14-postgis-3
 Now get your hands dirty
 
 ```
+sudo apt install libpq-dev
+sudo -i -u postgres
 createuser --interactive --pwprompt
 createdb postgis_db -O postgis_user
 psql -d postgis_db
