@@ -1,4 +1,4 @@
-fetch('http://api.open-accident-map.de/query/Flensburg', {
+fetch('https://api.open-accident-map.de/query/Flensburg', {
   method: 'GET'
 })
 .then((response) => {
