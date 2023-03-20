@@ -48,7 +48,7 @@ async def geometry_filter(geometry_string: str = None):
     FROM (
         SELECT jsonb_build_object(
             'type', 'Feature',
-            'id', CAST (objectid AS TEXT),
+            -- 'id', CAST (objectid AS TEXT),
             'geometry', ST_AsGeoJSON(ST_Transform(a.wkb_geometry, 4326))::jsonb,
             'properties', to_jsonb(a) - 'objectid' - 'linrefx' - 'linrefy' - \
             'xgcswgs84' - 'ygcswgs84' - 'wkb_geometry' - 'uidentstla' - 'ogc_fid'
