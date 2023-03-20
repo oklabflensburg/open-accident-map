@@ -1,5 +1,6 @@
 fetch('https://api.open-accident-map.de/query/Flensburg', {
-  method: 'GET'
+  method: 'GET',
+  mode: 'no-cors'
 })
 .then((response) => {
   return response.json();
