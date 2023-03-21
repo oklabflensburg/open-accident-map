@@ -34,8 +34,94 @@ db_connection.set_session(readonly = True)
 cur = db_connection.cursor()
 
 
+
+
+@app.get('/settings')
+async def geometry_settings():
+    db_query = '''
+    SELECT json_build_array(
+        json_build_object(
+            'istfuss', (
+                SELECT json_agg(row_to_json(f))
+                FROM postgis_istfuss AS f
+            )
+        ),
+        json_build_object(
+            'istgkfz', (
+                SELECT json_agg(row_to_json(g))
+                FROM postgis_istgkfz AS g
+            )
+        ),
+        json_build_object(
+            'istkrad', (
+                SELECT json_agg(row_to_json(k))
+                FROM postgis_istkrad AS k
+            )
+        ),
+        json_build_object(
+            'istpkw', (
+                SELECT json_agg(row_to_json(p))
+                FROM postgis_istpkw AS p
+            )
+        ),
+        json_build_object(
+            'istrad', (
+                SELECT json_agg(row_to_json(r))
+                FROM postgis_istrad AS r
+            )
+        ),
+        json_build_object(
+            'istsonstig', (
+                SELECT json_agg(row_to_json(s))
+                FROM postgis_istsonstig AS s
+            )
+        ),
+        json_build_object(
+            'uart', (
+                SELECT json_agg(row_to_json(a))
+                FROM postgis_uart AS a
+            )
+        ),
+        json_build_object(
+            'ukategorie', (
+                SELECT json_agg(row_to_json(c))
+                FROM postgis_ukategorie AS c
+            )
+        ),
+        json_build_object(
+            'uland', (
+                SELECT json_agg(row_to_json(l))
+                FROM postgis_uland AS l
+            )
+        ),
+        json_build_object(
+            'ulichtverh', (
+                SELECT json_agg(row_to_json(y))
+                FROM postgis_ulichtverh AS y
+            )
+        ),
+        json_build_object(
+            'ustrzustan', (
+                SELECT json_agg(row_to_json(z))
+                FROM postgis_ustrzustan AS z
+            )
+        ),
+        json_build_object(
+            'utyp1', (
+                SELECT json_agg(row_to_json(t))
+                FROM postgis_utyp1 AS t
+            )
+        )
+    );
+    '''
+    
+    cur.execute(db_query)
+
+    return cur.fetchall()[0]
+
+
 @app.get('/query/{geometry_string}')
-async def geometry_filter(geometry_string: str = None):
+async def geometry_results(geometry_string: str = None):
     # Note: for testing purposes f-strings or string concatenation are fine but never to be used in production!
     # Always use parametrized queries instead!
 
