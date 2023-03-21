@@ -1,3 +1,18 @@
+// fetch('http://localhost:8000/settings', {
+fetch('https://api.open-accident-map.de/settings', {
+  method: 'GET'
+})
+.then((response) => {
+  return response.json()
+})
+.then((data) => {
+  settings(data);
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+
 // fetch('http://localhost:8000/query/Flensburg', {
 fetch('https://api.open-accident-map.de/query/Flensburg', {
   method: 'GET'
@@ -6,12 +21,12 @@ fetch('https://api.open-accident-map.de/query/Flensburg', {
   return response.json()
 })
 .then((data) => {
-  console.log(data)
   marker(data);
 })
 .catch(function (error) {
   console.log(error);
 });
+
 
 const map = L.map('map').setView([54.7836, 9.4321], 13);
 
@@ -46,6 +61,15 @@ osmGeocoder.on('markgeocode', e => {
     const bounds = L.latLngBounds(e.geocode.bbox._southWest, e.geocode.bbox._northEast);
     map.fitBounds(bounds);
 });
+
+
+function settings(data) {
+  data.forEach(function (d, i) {
+    let keys = Object.values(d[i])
+    console.log(keys)
+  });
+}
+
 
 function marker(data) {
     let markers = L.markerClusterGroup({
