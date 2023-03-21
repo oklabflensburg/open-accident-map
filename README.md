@@ -40,6 +40,7 @@ Change diretory to the path where your dump is stored
 ```
 sudo -i -u postgres dropdb postgis_db
 sudo -i -u postgres createdb -O postgis_user postgis_db
+psql -h localhost -d postgis_db -U postgis_user -f meta.sql
 sudo -i -u postgres psql -d postgis_db < dump.sql
 ```
 
