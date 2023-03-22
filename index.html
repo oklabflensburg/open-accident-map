@@ -3,25 +3,100 @@
 <head>
     <meta charset="utf-8">
     <title>Open Accident Map - Deutschland</title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link crossorigin="" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
           integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
           rel="stylesheet">
     <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" rel="stylesheet">
     <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet">
     <link href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" rel="stylesheet">
-    <link href="https://unpkg.com/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
-
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet-src.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
 </head>
-<body>
-<div class="h-screen md:flex overflow-auto">
-    <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 h-96 sm:h-screen overflow-hidden" id="map"></div>
-    <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:h-screen sm:overflow-scroll bg-gray-100" id="filter">
-        <div class="flex flex-col bg-gray-700 pt-2 pb-4 px-3">
+<body class="">
+<nav class="w-full bg-gray-700 px-2 py-1.5 pb-2 fixed w-full z-40 top-0 left-0">
+    <div class="flex flex-wrap items-center justify-between mx-auto">
+        <a class="flex items-center bg-white rounded-lg py-1.5 px-3" href="https://open-accident-map.de">
+                <span class="self-center text-xl font-semibold whitespace-nowrap text-red-700">Open Accident Map <span
+                        class="self-bottom text-xl font-thin text-gray-800">2.0</span></span>
+        </a>
+        <div class="flex w-1/5 md:order-2">
+            <button aria-controls="navbar-search" aria-expanded="false"
+                    class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded text-sm p-2.5 mr-1"
+                    data-collapse-toggle="navbar-search"
+                    type="button">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          fill-rule="evenodd"></path>
+                </svg>
+                <span class="sr-only">Search</span>
+            </button>
+            <div class="relative items-center flex w-full mx-2">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd"
+                              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                              fill-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Search icon</span>
+                </div>
+                <input class="block w-full p-2 pl-10 text-md text-gray-900 border border-gray-300 rounded bg-gray-50 focus-ring-0 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       id="search-navbar"
+                       placeholder="Search..."
+                       type="text">
+            </div>
+            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-0 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">Go
+            </button>
+            <button aria-controls="navbar-sticky" aria-expanded="false"
+                    class="inline-flex items-center p-2 text-sm text-gray-500 rounded md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    data-collapse-toggle="navbar-sticky" type="button">
+                <span class="sr-only">Open main menu</span>
+                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                          fill-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 z-50"
+             id="navbar-sticky">
+            <ul class="flex flex-col py-3 px-6 mt-4 md:flex-row md:space-x-8 md:mt-0 md:font-medium">
+                <li>
+                    <a aria-current="page"
+                       class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
+                       href="#">Projekt</a>
+                </li>
+                <li>
+                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
+                       href="#">Daten</a>
+                </li>
+                <li>
+                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
+                       href="#">Download </a>
+                </li>
+                <li>
+                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
+                       href="#">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="sm:flex mt-12 sm:mt-16 overflow-hidden" id="wrapper">
+    <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 overflow-hidden" id="map"></div>
+    <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:overflow-scroll bg-neutral-100"
+         id="filter">
+        <div class="hidden flex flex-col bg-gray-700 pt-2 pb-4 px-3">
             <h2 class="text-xl font-medium mb-4 text-gray-100">Unfallart</h2>
             <div class="flex items-start mb-4">
                 <input class="w-1/12 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
@@ -104,25 +179,23 @@
         </div>
         <div class="py-2 px-3">
             <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">Interaktive Karte</h3>
-            <p class="font-mono mb-4 md:mb-8">Während einer kleinen Programmierarbeit ist diese interaktive webbasierte
+            <p class="font-mono mb-4 md:mb-8">Während einer kleinen Programmierarbeit ist diese interaktive
+                webbasierte
                 Karte mit den Daten des Bundesamt für Kartographie und Geodäsie entstanden. Nach einigen Stunden der
-                maschinellen
-                Aufarbeitung und Betrachtung der Datensätze haben wir uns
-                entschloßen die Daten in eine Posgis Postgres Datenbank
-                einzupflegen und zu indexieren
-                Unser Ziel ist es Entscheidungsträgern in Kommunen,
-                Verwaltungen und auch privaten Unternehmen eine Datenbasierte
-                Entscheidung anhand von den Daten und Ereignissen zu treffen.
+                maschinellen Aufarbeitung und Betrachtung der Datensätze haben wir uns entschloßen die Daten in eine
+                Posgis Postgres Datenbank einzupflegen und zu indexieren. Unser Ziel ist es Entscheidungsträgern in
+                Kommunen, Verwaltungen und auch privaten Unternehmen eine Datenbasierte Entscheidung anhand von den
+                Daten und Ereignissen zu treffen.
             </p>
             <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">Quellcode</h3>
             <p class="font-mono mb-4 md:mb-8"><a class="text-blue-600 hover:text-blue-500 focus:text-blue:500"
-                                    href="https://github.com/p3t3r67x0/open-accident-map"
-                                    target="_blank">GitHub</a>
+                                                 href="https://github.com/p3t3r67x0/open-accident-map"
+                                                 target="_blank">GitHub</a>
             </p>
             <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">
                 Datenquelle
             </h3>
-            <p class="font-mono mb-4 md:mb-8">tbd.</p>
+            <p class="font-mono">tbd.</p>
         </div>
     </div>
 </div>
