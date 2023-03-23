@@ -134,9 +134,12 @@ async def geometry_results(geometry_string: str = None):
     FROM (
         SELECT jsonb_build_object(
             'type', 'Feature',
-            -- 'id', CAST (objectid AS TEXT),
+            -- 'id', objectid::text,
             'geometry', ST_AsGeoJSON(ST_Transform(a.wkb_geometry, 4326))::jsonb,
-            'properties', COALESCE(to_jsonb(t), to_jsonb(tt)) ||
+            'properties', to_jsonb(ul) || to_jsonb(uw) || to_jsonb(um) ||
+            jsonb_build_object('ags', concat(a.uland, a.uregbez, a.ukreis, a.ugemeinde),
+            'ujahr', a.ujahr, 'ustunde', a.ustunde) ||
+            COALESCE(to_jsonb(t), to_jsonb(tt)) ||
             COALESCE(to_jsonb(k), to_jsonb(kk)) ||
             COALESCE(to_jsonb(i), to_jsonb(ii)) ||
             COALESCE(to_jsonb(z), to_jsonb(zz)) ||
@@ -149,52 +152,74 @@ async def geometry_results(geometry_string: str = None):
             COALESCE(to_jsonb(g), to_jsonb(gg))
         ) AS feature
         FROM postgis_unfallorte AS a
+
         JOIN postgis_verwaltungsgebiete AS v
         ON ST_WITHIN(a.wkb_geometry, v.wkb_geometry)
+
+        LEFT JOIN postgis_uwochentag AS uw
+        ON a.uwochentag = uw.id::text
+
+        LEFT JOIN postgis_uland AS ul
+        ON a.uland = LPAD(ul.id::text, 2, '0')
+
+        LEFT JOIN postgis_umonat AS um
+        ON a.umonat = LPAD(um.id::text, 2, '0')
+
         LEFT JOIN postgis_uart AS t
-        ON a.uart = CAST (t.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS uart) AS tt
+        ON a.uart = t.id::text
+        LEFT JOIN (SELECT '' AS uart) AS tt
         ON a.uart IS NULL
+
         LEFT JOIN postgis_ukategorie AS k
-        ON a.ukategorie = CAST (k.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS ukategorie) AS kk
+        ON a.ukategorie = k.id::text
+        LEFT JOIN (SELECT '' AS ukategorie) AS kk
         ON a.ukategorie IS NULL
+
         LEFT JOIN postgis_istrad AS r
-        ON a.istrad = CAST (r.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istrad) AS rr
+        ON a.istrad = r.id::text
+        LEFT JOIN (SELECT '' AS istrad) AS rr
         ON a.istrad IS NULL
+
         LEFT JOIN postgis_ulichtverh AS i
-        ON a.ulichtverh = CAST (i.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS ulichtverh) AS ii
+        ON a.ulichtverh = i.id::text
+        LEFT JOIN (SELECT '' AS ulichtverh) AS ii
         ON a.ulichtverh IS NULL
+
         LEFT JOIN postgis_istpkw AS j
-        ON a.istpkw = CAST (j.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istpkw) AS jj
+        ON a.istpkw = j.id::text
+        LEFT JOIN (SELECT '' AS istpkw) AS jj
         ON a.istpkw IS NULL
+
         LEFT JOIN postgis_istfuss AS f
-        ON a.istfuss = CAST (f.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istfuss) AS ff
+        ON a.istfuss = f.id::text
+        LEFT JOIN (SELECT '' AS istfuss) AS ff
         ON a.istfuss IS NULL
+
         LEFT JOIN postgis_istsonstig AS s
-        ON a.istsonstig = CAST (s.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istsonstig) AS ss
+        ON a.istsonstig = s.id::text
+        LEFT JOIN (SELECT '' AS istsonstig) AS ss
         ON a.istsonstig IS NULL
+
         LEFT JOIN postgis_istgkfz AS g
-        ON a.istgkfz = CAST (g.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istgkfz) AS gg
+        ON a.istgkfz = g.id::text
+        LEFT JOIN (SELECT '' AS istgkfz) AS gg
         ON a.istgkfz IS NULL
+
         LEFT JOIN postgis_istkrad AS m
-        ON a.istkrad = CAST (m.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS istkrad) AS mm
+        ON a.istkrad = m.id::text
+        LEFT JOIN (SELECT '' AS istkrad) AS mm
         ON a.istkrad IS NULL
+
         LEFT JOIN postgis_ustrzustan AS z
-        ON a.ustrzustan = CAST (z.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS ustrzustan) AS zz
+        ON a.ustrzustan = z.id::text
+        LEFT JOIN (SELECT '' AS ustrzustan) AS zz
         ON a.ustrzustan IS NULL
+
         LEFT JOIN postgis_utyp1 AS p
-        ON a.utyp1 = CAST (p.id AS TEXT)
-        LEFT JOIN (SELECT 'xxx' AS utyp1) AS pp
+        ON a.utyp1 = p.id::text
+        LEFT JOIN (SELECT '' AS utyp1) AS pp
         ON a.utyp1 IS NULL
+
         WHERE v.gen = %(geometry_string)s
     ) AS fc;
     '''
