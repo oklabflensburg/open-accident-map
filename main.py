@@ -120,8 +120,8 @@ async def geometry_settings():
     return cur.fetchall()[0]
 
 
-@app.get('/query/{geometry_string}')
-async def geometry_results(geometry_string: str = None):
+@app.get('/query/{query_string}')
+async def geometry_results(query_string: str = None):
     # Note: for testing purposes f-strings or string concatenation are fine but never to be used in production!
     # Always use parametrized queries instead!
 
@@ -220,12 +220,12 @@ async def geometry_results(geometry_string: str = None):
         LEFT JOIN (SELECT '' AS utyp1) AS pp
         ON a.utyp1 IS NULL
 
-        WHERE v.gen = %(geometry_string)s
+        WHERE LOWER(v.gen) = %(query_string)s
     ) AS fc;
     '''
 
     # execute the query safely
-    cur.execute(db_query, {'geometry_string': geometry_string})
+    cur.execute(db_query, {'query_string': query_string.lower()})
 
     results = cur.fetchall()
 
