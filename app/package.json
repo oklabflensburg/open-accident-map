@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.6.4",
+    "nuxt": "^3.3.2",
+    "webpack": "^5.76.3"
+  },
+  "peerDependencies": {
+    "webpack": "^5.76.3"
+  },
+  "dependencies": {
+    "ol": "^7.3.0",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vue3-openlayers": "^0.1.74"
+  }
+}
