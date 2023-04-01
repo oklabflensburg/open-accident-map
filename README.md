@@ -3,6 +3,8 @@
 Offene Daten der Unfallstatistik des BKG auf einer interaktiven webbasierten Karte
 
 
+![Screenshot interaktive Karte](https://raw.githubusercontent.com/oklabflensburg/open-accident-map/master/unfallkarte_stadt_flensburg.png)
+
 
 ## Setup System
 
