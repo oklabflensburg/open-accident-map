@@ -1,6 +1,6 @@
-# open-accident-map
+# Unfallkarte Deutschland
 
-Offene Daten der Unfallstatistik des BKG auf einer interaktiven webbasierten Karte
+Interaktive Karte von Unfällen mit Personenschaden der Statistischen Ämter des Bundes und der Länder in kombination mit den Verwaltungsgebieten des Bundesamtes für Kartographie und Geodäsie. Unfälle, bei denen nur Sachschaden entsteht, werden nicht dargestellt.
 
 
 ![Screenshot interaktive Karte](https://raw.githubusercontent.com/oklabflensburg/open-accident-map/master/unfallkarte_stadt_flensburg.png)
