@@ -6,10 +6,17 @@ Interaktive Karte von Unfällen mit Personenschaden der Statistischen Ämter des
 ![Screenshot Unfallkarte Deutschland](https://raw.githubusercontent.com/oklabflensburg/open-accident-map/main/screenshot_unfallkarte_deutschland.jpg)
 
 
-## Extract Data
+## Extract GeoJSON from Esri Shapefile
 
-```
+```sh
 ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2022.geojson Unfallorte2022_LinRef.shp
+```
+
+
+## Import Data from GeoJSON file
+
+```sh
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "vg250.geojson" -nln vg250
 ```
 
 
