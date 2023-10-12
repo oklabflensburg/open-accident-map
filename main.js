@@ -117,8 +117,8 @@ function marker(data) {
             const label = String(feature.properties.uart);
 
             const customIcon = L.icon({
-                iconUrl: '/assets/marker-icon-red.png',
-                shadowUrl: '/assets/marker-shadow.png',
+                iconUrl: '/static/marker-icon-red.png',
+                shadowUrl: '/static/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 tooltipAnchor: [0, -38],
