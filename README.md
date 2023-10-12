@@ -17,6 +17,13 @@ ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2
 
 ```sh
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "vg250.geojson" -nln vg250
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2016.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2017.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2018.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2019.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2020.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2021.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2022.geojson" -nln accidents -append
 ```
 
 
@@ -42,7 +49,7 @@ sudo apt install postgis postgresql-15-postgis-3
 Create table schemas and insert data
 
 ```sh
-sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5433 < data/unfallorte_metadaten_schema.sql
+sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5432 < data/unfallorte_deutschland_schema.sql
 ```
 
 
