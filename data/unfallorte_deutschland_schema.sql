@@ -226,3 +226,7 @@ INSERT INTO istsonstig(id, istsonstig) VALUES (1, 'Unfall mit Beteiligung eines 
 INSERT INTO ustrzustan(id, ustrzustan) VALUES (0, 'trocken');
 INSERT INTO ustrzustan(id, ustrzustan) VALUES (1, 'nass/feucht/schlüpfrig');
 INSERT INTO ustrzustan(id, ustrzustan) VALUES (2, 'winterglatt');
+
+-- GEOMETRY INDEX
+CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250_wkb_geometry_geom_idx ON vg250 USING gist (wkb_geometry);
