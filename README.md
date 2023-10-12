@@ -18,7 +18,7 @@ ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2
 Install dependencies which been used by this project
 
 ```
-sudo apt install gnupg2
+sudo apt install gnupg2 git git-lfs
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > postgresql-keyring.gpg
 sudo mv postgresql-keyring.gpg /etc/apt/trusted.gpg.d/
 sudo chown root:root /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
@@ -26,40 +26,28 @@ sudo chmod ugo+r /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
 sudo chmod go-w /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
 echo "deb [arch=amd64, signed-by=/etc/apt/trusted.gpg.d/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
 sudo apt update
-sudo apt install postgis postgresql-14-postgis-3
+sudo apt install postgis postgresql-15-postgis-3
 ```
 
 
 ## Setup Database
 
-Now get your hands dirty
+Create table schemas and insert data
 
-```
-sudo apt install libpq-dev
-sudo -i -u postgres
-createuser --interactive --pwprompt
-createdb postgis_db -O postgis_user
-psql -d postgis_db
-CREATE EXTENSION postgis;
-SELECT PostGIS_version();
-```
-
-Change diretory to the path where your dump is stored
-
-```
-sudo -i -u postgres dropdb postgis_db
-sudo -i -u postgres createdb -O postgis_user postgis_db
-psql -h localhost -d postgis_db -U postgis_user -f meta.sql
-sudo -i -u postgres psql -d postgis_db < dump.sql
+```sh
+sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5433 < data/unfallorte_metadaten_schema.sql
 ```
 
 
 ## Setup Application
 
-```
-sudo apt install python3.10 virtualenv tree git jq
-git clone https://github.com/p3t3r67x0/open-accident-map.git
+Clone repository and setup git lfs
+
+```sh
+sudo apt install nginx-full certbot python3 virtualenv
+git clone https://github.com/oklabflensburg/open-accident-map.git
 cd open-accident-map
+git lfs pull
 virtualenv venv
 . venv/bin/activate
 pip install -r requirements.txt
@@ -68,11 +56,11 @@ pip install -r requirements.txt
 
 ## Setup Service
 
-```
+```sh
 sudo vim /etc/systemd/system/api-open-accident-map.service
 ```
 
-```
+```sh
 [Unit]
 Description=API instance to serve the backend
 After=network.target
@@ -108,7 +96,7 @@ WantedBy=multi-user.target
 
 Setup frontend webserver configuration for nginx
 
-```
+```sh
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -131,7 +119,7 @@ server {
 
 Setup backend webserver configuration for nginx reverse proxy
 
-```
+```sh
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -201,11 +189,13 @@ server {
 }
 ```
 
-Follow the instructions from corresponding programm
 
-```
-sudo apt install nginx-full certbot python3-certbot-nginx
+Test your webserver configuration and install certificates
+
+```sh
 sudo nginx -t
 sudo certbot
-sudo systemctl reload nginx.service
+sudo systemctl start nginx.service
+sudo systemctl status nginx.service
+sudo systemctl enable nginx.service
 ```
