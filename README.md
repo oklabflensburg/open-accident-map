@@ -16,7 +16,7 @@ ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2
 ## Import Data from GeoJSON file
 
 ```sh
-ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "vg250.geojson" -nln vg250
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/vg250.geojson" -nln vg250
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2016.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2017.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2018.geojson" -nln accidents -append
@@ -24,6 +24,17 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=54
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2020.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2021.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2022.geojson" -nln accidents -append
+```
+
+
+## Create Indexes
+
+```sql
+ALTER TABLE accidents ADD COLUMN wkb_geometry GEOMETRY(GEOMETRY, 4326);
+ALTER TABLE accidents ALTER COLUMN wkb_geometry TYPE GEOMETRY(GEOMETRY, 4326) USING ST_GeomFromGeoJSON(geometry);
+CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250_wkb_geometry_geom_idx ON vg250 USING gist (wkb_geometry);
+ALTER TABLE accidents DROP COLUMN geometry;
 ```
 
 
