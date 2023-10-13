@@ -1,18 +1,3 @@
-// fetch('http://localhost:8000/settings', {
-fetch('https://api.open-accident-map.de/settings', {
-  method: 'GET'
-})
-.then((response) => {
-  return response.json()
-})
-.then((data) => {
-  settings(data);
-})
-.catch(function (error) {
-  console.log(error);
-});
-
-
 fetch('https://api.oklabflensburg.de/accidents/v1/details?query=flensburg', {
   method: 'GET'
 })
@@ -60,14 +45,6 @@ osmGeocoder.on('markgeocode', e => {
     const bounds = L.latLngBounds(e.geocode.bbox._southWest, e.geocode.bbox._northEast);
     map.fitBounds(bounds);
 });
-
-
-function settings(data) {
-  data.forEach(function (d, i) {
-    let keys = Object.values(d[i])
-    console.log(keys)
-  });
-}
 
 
 function marker(data) {
