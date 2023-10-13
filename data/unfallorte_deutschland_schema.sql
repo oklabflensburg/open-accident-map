@@ -89,42 +89,6 @@ CREATE TABLE IF NOT EXISTS istsonstig (
   istsonstig VARCHAR(255) NOT NULL
 );
 
-DROP TABLE IF EXISTS ustrzustan;
-
-CREATE TABLE IF NOT EXISTS ustrzustan (
-  id SERIAL PRIMARY KEY,
-  ustrzustan VARCHAR(255) NOT NULL
-);
-
-DROP TABLE IF EXISTS accidents;
-
-CREATE TABLE IF NOT EXISTS accidents (
-  ogc_fid INT,
-  objectid INT,
-  uidentstla VARCHAR,
-  uland VARCHAR,
-  uregbez VARCHAR,
-  ukreis VARCHAR,
-  ugemeinde VARCHAR,
-  ujahr VARCHAR,
-  umonat VARCHAR,
-  ustunde VARCHAR,
-  uwochentag VARCHAR,
-  ukategorie VARCHAR,
-  uart VARCHAR,
-  utyp1 VARCHAR,
-  ulichtverh VARCHAR,
-  istrad VARCHAR,
-  istpkw VARCHAR,
-  istfuss VARCHAR,
-  istkrad VARCHAR,
-  istgkfz VARCHAR,
-  istsonstig VARCHAR,
-  ustrzustan VARCHAR,
-  wkb_geometry GEOMETRY,
-  PRIMARY KEY(objectid)
-);
-
 
 -- ULAND Bundesland
 INSERT INTO uland(id, uland) VALUES (1, 'Schleswig-Holstein');
@@ -222,10 +186,6 @@ INSERT INTO istgkfz(id, istgkfz) VALUES (1, 'Unfall mit Güterkraftfahrzeugbetei
 INSERT INTO istsonstig(id, istsonstig) VALUES (0, 'Unfall ohne Beteiligung eines oben nicht genannten Verkehrsmittels');
 INSERT INTO istsonstig(id, istsonstig) VALUES (1, 'Unfall mit Beteiligung eines oben nicht genannten Verkehrsmittels');
 
--- USTRZUSTAND Straßenzustand
-INSERT INTO ustrzustan(id, ustrzustan) VALUES (0, 'trocken');
-INSERT INTO ustrzustan(id, ustrzustan) VALUES (1, 'nass/feucht/schlüpfrig');
-INSERT INTO ustrzustan(id, ustrzustan) VALUES (2, 'winterglatt');
 
 -- GEOMETRY INDEX
 CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
