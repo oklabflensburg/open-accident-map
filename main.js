@@ -13,8 +13,7 @@ fetch('https://api.open-accident-map.de/settings', {
 });
 
 
-// fetch('http://localhost:8000/query/Flensburg', {
-fetch('https://api.open-accident-map.de/query/Flensburg', {
+fetch('https://api.oklabflensburg.de/accidents/v1/details?query=flensburg', {
   method: 'GET'
 })
 .then((response) => {
