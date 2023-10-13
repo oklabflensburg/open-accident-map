@@ -38,6 +38,14 @@ ALTER TABLE accidents DROP COLUMN geometry;
 ```
 
 
+## Reindex GIST
+
+```sql
+REINDEX INDEX accidents_wkb_geometry_geom_idx;
+REINDEX INDEX vg250_wkb_geometry_geom_idx;
+```
+
+
 ## Setup System
 
 Install dependencies which been used by this project
