@@ -29,30 +29,44 @@ except Exception as e:
     print(e)
 
 
+
+def get_attribute(obj, key):
+    attr = None
+
+    try:
+        attr = getattr(obj, key)
+    except AttributeError:
+        pass
+
+    return attr
+
+
+
 def insert_row(cur, properties, geometry):
     if geometry['type'].lower() == 'point':
         g = Point(shape(geometry))
 
-    objectid = properties['OBJECTID']
-    uland = properties['ULAND']
-    uregbez = properties['UREGBEZ']
-    ukreis = properties['UKREIS']
-    ugemeinde = properties['UGEMEINDE']
-    ujahr = properties['UJAHR']
-    umonat = properties['UMONAT']
-    ustunde = properties['USTUNDE']
-    uwochentag = properties['UWOCHENTAG']
-    ukategorie = properties['UKATEGORIE']
-    uart = properties['UART']
-    utyp1 = properties['UTYP1']
-    ulichtverh = properties['ULICHTVERH']
-    iststrasse = properties['IstStrasse']
-    istrad = properties['IstRad']
-    istpkw = properties['IstPKW']
-    istfuss = properties['IstFuss']
-    istkrad = properties['IstKrad']
-    istgkfz = properties['IstGkfz']
-    istsonstig = properties['IstSonstig']
+    objectid = get_attribute(properties, 'OBJECTID')
+
+    uland = get_attribute(properties, 'ULAND')
+    uregbez = get_attribute(properties, 'UREGBEZ')
+    ukreis = get_attribute(properties, 'UKREIS')
+    ugemeinde = get_attribute(properties, 'UGEMEINDE')
+    ujahr = get_attribute(properties, 'UJAHR')
+    umonat = get_attribute(properties, 'UMONAT')
+    ustunde = get_attribute(properties, 'USTUNDE')
+    uwochentag = get_attribute(properties, 'UWOCHENTAG')
+    ukategorie = get_attribute(properties, 'UKATEGORIE')
+    uart = get_attribute(properties, 'UART')
+    utyp1 = get_attribute(properties, 'UTYP1')
+    ulichtverh = get_attribute(properties, 'ULICHTVERH')
+    iststrasse = get_attribute(properties, 'IstStrasse')
+    istrad = get_attribute(properties, 'IstRad')
+    istpkw = get_attribute(properties, 'IstPKW')
+    istfuss = get_attribute(properties, 'IstFuss')
+    istkrad = get_attribute(properties, 'IstKrad')
+    istgkfz = get_attribute(properties, 'IstGkfz')
+    istsonstig = get_attribute(properties, 'IstSonstig')
     wkb_geometry = wkb.dumps(g, hex=True, srid=4326)
     ags = f'{uland}{uregbez}{ukreis}{ugemeinde}'
 
