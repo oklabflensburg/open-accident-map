@@ -33,10 +33,8 @@ except Exception as e:
 def get_attribute(obj, key):
     attr = None
 
-    try:
-        attr = getattr(obj, key)
-    except AttributeError:
-        pass
+    if key in obj:
+        attr = obj[key]
 
     return attr
 
@@ -46,8 +44,8 @@ def insert_row(cur, properties, geometry):
     if geometry['type'].lower() == 'point':
         g = Point(shape(geometry))
 
+    ags = None
     objectid = get_attribute(properties, 'OBJECTID')
-
     uland = get_attribute(properties, 'ULAND')
     uregbez = get_attribute(properties, 'UREGBEZ')
     ukreis = get_attribute(properties, 'UKREIS')
@@ -68,7 +66,9 @@ def insert_row(cur, properties, geometry):
     istgkfz = get_attribute(properties, 'IstGkfz')
     istsonstig = get_attribute(properties, 'IstSonstig')
     wkb_geometry = wkb.dumps(g, hex=True, srid=4326)
-    ags = f'{uland}{uregbez}{ukreis}{ugemeinde}'
+
+    if uland and uregbez and ukreis and ugemeinde:
+        ags = f'{uland}{uregbez}{ukreis}{ugemeinde}'
 
     sql = 'INSERT INTO accidents (objectid, ags, uland, uregbez, ukreis, ugemeinde, ujahr, umonat, ustunde, uwochentag, ukategorie, uart, utyp1, ulichtverh, iststrasse, istrad, istpkw, istfuss, istkrad, istgkfz, istsonstig, wkb_geometry) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
@@ -87,7 +87,6 @@ def main(file):
         features = json.loads(f.read())['features']
 
         for feature in features:
-            print(feature)
             insert_row(cur, feature['properties'], feature['geometry'])
 
 
