@@ -191,7 +191,7 @@ DROP TABLE IF EXISTS accidents CASCADE;
 
 CREATE TABLE IF NOT EXISTS accidents (
   id SERIAL PRIMARY KEY,
-  objectid INT,
+  objectid VARCHAR,
   ags VARCHAR,
   uland VARCHAR,
   uregbez VARCHAR,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS accidents (
   wkb_geometry GEOMETRY(GEOMETRY, 4326)
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS accidents_objectid_idx ON accidents (objectid);
+CREATE INDEX IF NOT EXISTS accidents_ags_idx ON accidents (ags);
 
 
 
