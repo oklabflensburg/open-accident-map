@@ -186,6 +186,35 @@ INSERT INTO istgkfz(id, istgkfz) VALUES (1, 'Unfall mit Güterkraftfahrzeugbetei
 INSERT INTO istsonstig(id, istsonstig) VALUES (0, 'Unfall ohne Beteiligung eines oben nicht genannten Verkehrsmittels');
 INSERT INTO istsonstig(id, istsonstig) VALUES (1, 'Unfall mit Beteiligung eines oben nicht genannten Verkehrsmittels');
 
+-- Accidents
+DROP TABLE IF EXISTS accidents CASCADE;
+
+CREATE TABLE IF NOT EXISTS accidents (
+  id SERIAL PRIMARY KEY,
+  objectid INT,
+  ags VARCHAR,
+  uland VARCHAR,
+  uregbez VARCHAR,
+  ukreis VARCHAR,
+  ugemeinde VARCHAR,
+  ujahr VARCHAR,
+  umonat VARCHAR,
+  ustunde VARCHAR,
+  uwochentag VARCHAR,
+  ukategorie VARCHAR,
+  uart VARCHAR,
+  utyp1 VARCHAR,
+  ulichtverh VARCHAR,
+  iststrasse VARCHAR,
+  istrad VARCHAR,
+  istpkw VARCHAR,
+  istfuss VARCHAR,
+  istkrad VARCHAR,
+  istgkfz VARCHAR,
+  istsonstig VARCHAR,
+  wkb_geometry GEOMETRY(GEOMETRY, 4326)
+);
+
 
 -- GEOMETRY INDEX
 CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
