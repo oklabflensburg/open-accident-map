@@ -215,6 +215,9 @@ CREATE TABLE IF NOT EXISTS accidents (
   wkb_geometry GEOMETRY(GEOMETRY, 4326)
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS accidents_objectid_idx ON accidents (objectid);
+
+
 
 -- GEOMETRY INDEX
 CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
