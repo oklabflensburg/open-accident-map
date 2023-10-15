@@ -2,195 +2,38 @@
 <html lang="de">
 <head>
     <meta charset="utf-8">
-    <title>Unfallkarte Deutschland</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet-src.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+    <title>Unfallkarte - Stadt Flensburg</title>
+    <meta content="Geographische Darstellung der Unfälle in Flensburg Schleswig-Holstein" name="description">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link crossorigin="" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-          rel="stylesheet">
-    <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" rel="stylesheet">
-    <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet">
-    <link href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
 </head>
-<body class="">
-<nav class="w-full bg-gray-700 p-2 fixed w-full z-40 top-0 left-0">
-    <div class="flex flex-wrap items-center justify-between mx-auto">
-        <a class="flex items-center bg-white rounded-lg py-1.5 px-3" href="https://open-accident-map.de">
-                <span class="self-center text-xl font-semibold whitespace-nowrap text-red-700">Open Accident Map <span
-                        class="self-bottom text-xl font-thin text-gray-800">2.0</span></span>
-        </a>
-        <div class="flex w-1/5 md:order-2">
-            <button aria-controls="navbar-search" aria-expanded="false"
-                    class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded text-sm p-2.5 mr-1"
-                    data-collapse-toggle="navbar-search"
-                    type="button">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path clip-rule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                          fill-rule="evenodd"></path>
-                </svg>
-                <span class="sr-only">Search</span>
-            </button>
-            <div class="relative items-center flex w-full mx-2">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd"
-                              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                              fill-rule="evenodd"></path>
-                    </svg>
-                    <span class="sr-only">Search icon</span>
+<body>
+    <div class="h-screen overflow-auto bg-gray-300">
+        <div class="md:flex">
+            <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 h-96 overflow-hidden" id="map"></div>
+            <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:overflow-scroll bg-gray-100" id="filter">
+                <div class="py-2 px-3">
+                    <h1 class="text-2xl md:text-3xl font-bold">Unfallkarte 2022</h1>
+                    <h2 class="text-xl md:text-2xl mb-2 md:mb-4">Stadt Flensburg</h2>
                 </div>
-                <input class="block w-full p-2 pl-10 text-md text-gray-900 border border-gray-300 rounded bg-gray-50 focus-ring-0 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       id="search-navbar"
-                       placeholder="Search..."
-                       type="text">
+                <div id="details"></div>
+                <div class="pb-2 px-3">
+                    <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Verkehrslenkung</h3>
+                    <p class="font-mono mb-4 md:mb-8">Während einer kleinen Brainstorming Session ist diese interaktive webbasierte Karte mit den Daten des Bundesamtes für Kartographie und Geodäsie entstanden. Nach einigen Stunden der maschinellen Aufarbeitung und Betrachtung der Datensätze haben wir uns entschlossen, die Daten in eine Postgis Postgres Datenbank einzupflegen und zu indexieren. Unser Ziel ist es Entscheidungsträgern in Kommunen, Verwaltungen und auch privaten Unternehmen eine Datenbasierte Entscheidung anhand von Daten und Ereignissen zu treffen.</p>
+                    <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Überlegungen</h3>
+                    <p class="font-mono mb-4 md:mb-8">Wir haben uns mit folgenden Fragestellungen auseinandergesetzt, welche Straßen oder Kreuzungen sind besonders häufig von Unfällen betroffen? An welchen Orten häufen sich Verkehrsunfälle mit Todesfolge oder Schwerstverletzen? Welche Informationen werden der Allgemeinheit über <a class="text-blue-600 hover:text-blue-500 focus:text-blue:500" href="https://overpass-turbo.eu" target="_blank">Openstreetmap</a> angeboten?</p>
+                    <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Quellcode</h3>
+                    <p class="font-mono"><a class="text-blue-600 hover:text-blue-500 focus:text-blue:500" href="https://github.com/oklabflensburg/open-accident-map" target="_blank">GitHub</a></p>
+                </div>
             </div>
-            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-0 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">Go
-            </button>
-            <button aria-controls="navbar-sticky" aria-expanded="false"
-                    class="inline-flex items-center p-2 text-sm text-gray-500 rounded md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                    data-collapse-toggle="navbar-sticky" type="button">
-                <span class="sr-only">Open main menu</span>
-                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path clip-rule="evenodd"
-                          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                          fill-rule="evenodd"></path>
-                </svg>
-            </button>
         </div>
-        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 z-50"
-             id="navbar-sticky">
-            <ul class="flex flex-col py-3 px-6 mt-4 md:flex-row md:space-x-8 md:mt-0 md:font-medium">
-                <li>
-                    <a aria-current="page"
-                       class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
-                       href="#">Projekt</a>
-                </li>
-                <li>
-                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
-                       href="#">Daten</a>
-                </li>
-                <li>
-                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
-                       href="#">Download </a>
-                </li>
-                <li>
-                    <a class="block py-2 pl-3 pr-4 text-white hover:text-orange-50 focus:text-orange-50 md:p-0"
-                       href="#">GitHub</a>
-                </li>
-            </ul>
-        </div>
+        <footer class="flex justify-center items-center h-[6vh] md:h-[4vh] text-sm">
+            <a class="inline-block text-gray-600 hover:text-gray-900 focus:text-gray-900" href="impressum.html">Impressum</a> <span class="inline-block text-gray-600 px-3">|</span> <a class="inline-block text-gray-600 hover:text-gray-900 focus:text-gray-900" href="impressum.html#privacypolicy">Datenschutzerklärung</a> <span class="inline-block text-gray-600 px-3">|</span> <a class="inline-block text-gray-600 hover:text-gray-900 focus:text-gray-900" href="lizenz.html">Lizenz</a>
+        </footer>
     </div>
-</nav>
-<div class="sm:flex mt-12 sm:mt-16 overflow-hidden" id="wrapper">
-    <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 overflow-hidden" id="map"></div>
-    <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:overflow-scroll bg-neutral-100"
-         id="filter">
-        <div class="hidden flex flex-col bg-gray-700 pt-2 pb-4 px-3">
-            <h2 class="text-xl font-medium mb-4 text-gray-100">Unfallart</h2>
-            <div class="flex items-start mb-4">
-                <input class="w-1/12 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                       id="uart-1" type="checkbox"
-                       value="">
-                <label class="w-11/12 ml-2 -mt-1 text-md font-medium text-gray-100 dark:text-gray-100" for="uart-1">Zusammenstoß
-                    mit entgegenkommendem Fahrzeug</label>
-            </div>
-            <div class="flex items-start mb-4">
-                <input class="w-1/12 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                       id="uart-2" type="checkbox"
-                       value="">
-                <label class="w-11/12 ml-2 -mt-1 text-md font-medium text-gray-100 dark:text-gray-100" for="uart-2">Zusammenstoß
-                    mit vorausfahrendem / wartendem Fahrzeug vorausfahrendem / wartendem Fahrzeug vorausfahrendem /
-                    wartendem Fahrzeug</label>
-            </div>
-            <div class="flex items-start">
-                <input class="w-1/12 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                       id="uart-3" type="checkbox"
-                       value="">
-                <label class="w-11/12 ml-2 -mt-1 text-md font-medium text-gray-100 dark:text-gray-100" for="uart-3">Unfall
-                    anderer Art</label>
-            </div>
-        </div>
-        <div class="">
-            <div class="text-red-700 p-3">
-                <h1 class="text-2xl md:text-3xl font-bold">
-                    Open Accident Map
-                </h1>
-                <h2 class="text-gray-700 text-md">
-                    Datenlizenz Deutschland - Version 2.0
-                </h2>
-            </div>
-            <div class="hidden font-sans text-md" id="details">
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Unfallart</div>
-                    <div id="uart"></div>
-                </div>
-                <div class="bg-gray-200 py-2 px-3">
-                    <div class="font-medium text-lg">Unfallkategorie</div>
-                    <div id="ukategorie"></div>
-                </div>
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Unfalltyp</div>
-                    <div id="utyp1"></div>
-                </div>
-                <div class="bg-gray-200 py-2 px-3">
-                    <div class="font-medium text-lg">Lichtverhältnisse</div>
-                    <div id="ulichtverh"></div>
-                </div>
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Straßenzustand</div>
-                    <div id="ustrzustan"></div>
-                </div>
-                <div class="bg-gray-200 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Rad</div>
-                    <div id="istrad"></div>
-                </div>
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Pkw</div>
-                    <div id="istpkw"></div>
-                </div>
-                <div class="bg-gray-200 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Güterkraftfahrzeug</div>
-                    <div id="istgkfz"></div>
-                </div>
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Kraftrad</div>
-                    <div id="istkrad"></div>
-                </div>
-                <div class="bg-gray-200 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Sonstigen</div>
-                    <div id="istsonstig"></div>
-                </div>
-                <div class="bg-gray-300 py-2 px-3">
-                    <div class="font-medium text-lg">Unfall mit Fußgänger</div>
-                    <div id="istfuss"></div>
-                </div>
-            </div>
-        </div>
-        <div class="py-2 px-3">
-            <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">Interaktive Karte</h3>
-            <p class="font-mono mb-4 md:mb-8">Während einer kleinen Brainstorming Session ist diese interaktive webbasierte Karte mit den Daten des Bundesamtes für Kartographie und Geodäsie entstanden. Nach einigen Stunden der maschinellen Aufarbeitung und Betrachtung der Datensätze haben wir uns entschlossen, die Daten in eine Postgis Postgres Datenbank einzupflegen und zu indexieren. Unser Ziel ist es Entscheidungsträgern in Kommunen, Verwaltungen und auch privaten Unternehmen eine Datenbasierte Entscheidung anhand von Daten und Ereignissen zu treffen.</p>
-            <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">Quellcode</h3>
-            <p class="font-mono mb-4 md:mb-8"><a class="text-blue-600 hover:text-blue-500 focus:text-blue:500"
-                                                 href="https://github.com/oklabflensburg/open-accident-map"
-                                                 target="_blank">GitHub</a>
-            </p>
-            <h3 class="font-sans text-xl md:text-2xl mb-1 md:mb-3">
-                Datenquelle
-            </h3>
-            <p class="font-mono">tbd.</p>
-        </div>
-    </div>
-</div>
-<script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
