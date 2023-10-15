@@ -218,7 +218,6 @@ CREATE TABLE IF NOT EXISTS accidents (
 CREATE INDEX IF NOT EXISTS accidents_ags_idx ON accidents (ags);
 
 
-
 -- GEOMETRY INDEX
 CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
 CREATE INDEX IF NOT EXISTS vg250_wkb_geometry_geom_idx ON vg250 USING gist (wkb_geometry);
