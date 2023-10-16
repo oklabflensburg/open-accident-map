@@ -10,6 +10,7 @@ const geoJsonUrls = [
 ];
 
 let currentClickedLayer = null;
+let currentClickedMarker = null;
 let metaDataArray = null;
 
 const circleMarkers = [];
@@ -49,37 +50,45 @@ const pointToLayerFunctions = [
     });
 
     const year = feature.properties.ujahr
-    const tooltip = getMetaName(metaDataArray.utyp1, feature.properties.utyp1);
+    const utyp1 = getMetaValue(metaDataArray.utyp1, feature.properties.utyp1);
 
     // Add a tooltip to the CircleMarker
-    const label = `${tooltip.utyp1}, ${year}`;
+    const label = `${utyp1.name}, ${year}`;
 
     circleMarker.bindTooltip(label);
 
     // Add an onClick event handler to each CircleMarker
     circleMarker.on('click', function (e) {
-      // Center the map on the CircleMarker's location
-      map.setView(latlng, 17);
+      const currentZoom = map.getZoom();
 
-      const detail = {
-        ukategorie: getMetaName(metaDataArray.ukategorie, e.target.feature.properties.ukategorie),
-        uwochentag: getMetaName(metaDataArray.uwochentag, e.target.feature.properties.uwochentag),
-        umonat: getMetaName(metaDataArray.umonat, e.target.feature.properties.umonat),
-        ujahr: feature.properties.ujahr,
-        ustunde: removeLeadingZero(feature.properties.ustunde),
-        uland: getMetaName(metaDataArray.uland, e.target.feature.properties.uland),
-        utyp1: getMetaName(metaDataArray.utyp1, e.target.feature.properties.utyp1),
-        uart: getMetaName(metaDataArray.uart, e.target.feature.properties.uart),
-        ulichtverh: getMetaName(metaDataArray.ulichtverh, e.target.feature.properties.ulichtverh),
-        istrad: getMetaName(metaDataArray.istrad, e.target.feature.properties.istrad),
-        istpkw: getMetaName(metaDataArray.istpkw, e.target.feature.properties.istpkw),
-        istfuss: getMetaName(metaDataArray.istfuss, e.target.feature.properties.istfuss),
-        istgkfz: getMetaName(metaDataArray.istgkfz, e.target.feature.properties.istgkfz),
-        istkrad: getMetaName(metaDataArray.istkrad, e.target.feature.properties.istkrad),
-        istsonstig: getMetaName(metaDataArray.istsonstig, e.target.feature.properties.istsonstig)
+      // Set minimum zoom level
+      let zoomView = 18;
+
+      if (zoomView < currentZoom) {
+        zoomView = currentZoom;
       }
 
-      console.log(detail);
+      // Center the map on the CircleMarker's location
+      map.setView(latlng, zoomView);
+
+      const detail = {
+        ukategorie: getMetaValue(metaDataArray.ukategorie, e.target.feature.properties.ukategorie),
+        uwochentag: getMetaValue(metaDataArray.uwochentag, e.target.feature.properties.uwochentag),
+        umonat: getMetaValue(metaDataArray.umonat, e.target.feature.properties.umonat),
+        ujahr: feature.properties.ujahr,
+        ustunde: removeLeadingZero(feature.properties.ustunde),
+        uland: getMetaValue(metaDataArray.uland, e.target.feature.properties.uland),
+        utyp1: getMetaValue(metaDataArray.utyp1, e.target.feature.properties.utyp1),
+        uart: getMetaValue(metaDataArray.uart, e.target.feature.properties.uart),
+        ulichtverh: getMetaValue(metaDataArray.ulichtverh, e.target.feature.properties.ulichtverh),
+        istrad: getMetaValue(metaDataArray.istrad, e.target.feature.properties.istrad),
+        istpkw: getMetaValue(metaDataArray.istpkw, e.target.feature.properties.istpkw),
+        istfuss: getMetaValue(metaDataArray.istfuss, e.target.feature.properties.istfuss),
+        istgkfz: getMetaValue(metaDataArray.istgkfz, e.target.feature.properties.istgkfz),
+        istkrad: getMetaValue(metaDataArray.istkrad, e.target.feature.properties.istkrad),
+        istsonstig: getMetaValue(metaDataArray.istsonstig, e.target.feature.properties.istsonstig)
+      }
+
       let detailOutput = '';
 
       for (const key of Object.keys(detail)) {
@@ -87,63 +96,63 @@ const pointToLayerFunctions = [
 
         if (value !== undefined) {
           if (key === 'umonat') {
-            detailOutput += `<li class="xxx"><strong>Monat</strong> ${value.umonat}</li>`
+            detailOutput += `<li><strong>Monat</strong> ${value.name}</li>`
           }
 
           if (key === 'uland') {
-            detailOutput += `<li class="xxx"><strong>Bundesland</strong> ${value.uland}</li>`
+            detailOutput += `<li><strong>Bundesland</strong> ${value.name}</li>`
           }
 
           if (key === 'ujahr') {
-            detailOutput += `<li class="xxx"><strong>Jahr</strong> ${value}</li>`
+            detailOutput += `<li><strong>Jahr</strong> ${value}</li>`
           }
 
           if (key === 'ustunde') {
-            detailOutput += `<li class="xxx"><strong>Ungefähr</strong> ${value} Uhr</li>`
+            detailOutput += `<li><strong>Ungefähr</strong> ${value} Uhr</li>`
           }
 
           if (key === 'uwochentag') {
-            detailOutput += `<li class="xxx"><strong>Tag</strong> ${value.uwochentag}</li>`
+            detailOutput += `<li><strong>Tag</strong> ${value.name}</li>`
           }
 
           if (key === 'istrad') {
-            detailOutput += `<li class="xxx"><strong>-</strong> ${value.istrad}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'istpkw') {
-            detailOutput += `<li class="xxx"><strong>-</strong> ${value.istpkw}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'istfuss') {
-            detailOutput += `<li class="xxx"><strong>-</strong> ${value.istfuss}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'istgkfz') {
-            detailOutput += `<li class="xxx"><strong>-</strong> ${value.istgkfz}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'istkrad') {
-            detailOutput += `<li class="xxx"><strong>-</strong> ${value.istkrad}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'istsonstig') {
-            detailOutput += `<li class="xxx"><strong>Beteiligung</strong> ${value.istsonstig}</li>`
+            detailOutput += `<li><strong>-</strong> ${value.name}</li>`
           }
 
           if (key === 'ukategorie') {
-            detailOutput += `<li class="text-xl"><strong>${value.ukategorie}</strong></li>`
+            detailOutput += `<li class="text-xl"><strong>${value.name}</strong></li>`
           }
 
           if (key === 'ulichtverh') {
-            detailOutput += `<li class="xxx"><strong>Lichtverhältnisse</strong> ${value.ulichtverh}</li>`
+            detailOutput += `<li><strong>Lichtverhältnisse</strong> ${value.name}</li>`
           }
 
           if (key === 'utyp1') {
-            detailOutput += `<li class="xxx"><strong>Unfalltyp</strong> ${value.utyp1}</li>`
+            detailOutput += `<li><strong>Unfalltyp</strong> ${value.name}</li>`
           }
 
           if (key === 'uart') {
-            detailOutput += `<li class="xxx"><strong>Unfallart</strong> ${value.uart}</li>`
+            detailOutput += `<li><strong>Unfallart</strong> ${value.name}</li>`
           }
         }
       }
@@ -178,7 +187,20 @@ const onEachFeatureFunctions = [
     });
   },
   (feature, layer, index) => {
-    // Custom logic for the second GeoJSON layer with index = 1
+    // Add a click event handler for each layer
+    layer.on('click', function () {
+      // Check if there was a previously clicked marker
+      if (currentClickedMarker) {
+        // Reset the color of the previously clicked marker
+        currentClickedMarker.setStyle({ fillColor: '#f95016' });
+      }
+
+      // Set the fill color of the clicked marker
+      layer.setStyle({ fillColor: '#00f' }); 
+
+      // Update the currently clicked layer
+      currentClickedMarker = layer;
+    });
   },
   (feature, layer, index) => {
     // Custom logic for the third GeoJSON layer with index = 2
@@ -308,12 +330,12 @@ Promise.all(geoJsonPromises)
     console.error('Error fetching GeoJSON data:', error);
   });
 
-function getMetaName(array, property) {
+function getMetaValue(array, property) {
   return array.find((item) => item.id === removeLeadingZero(property));
 }
 
 function removeLeadingZero(inputString) {
-  if (inputString.startsWith('0')) {
+  if (inputString !== null && inputString.startsWith('0')) {
     return parseInt(inputString.substring(1));
   }
 
