@@ -16,7 +16,7 @@ const circleMarkers = [];
 const geoJsonLayers = [];
 
 const style1 = {
-  fillColor: '#d1e4fd',
+  fillColor: '#fff',
   color: '#989898',
   weight: 2,
   opacity: .7
@@ -167,7 +167,7 @@ const onEachFeatureFunctions = [
       // Check if there was a previously clicked layer
       if (currentClickedLayer) {
         // Reset the fill color of the previously clicked layer
-        currentClickedLayer.setStyle({ fillColor: '#d1e4fd' });
+        currentClickedLayer.setStyle({ fillColor: '#fff' });
       }
 
       // Set the fill color of the clicked layer
