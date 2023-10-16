@@ -192,10 +192,16 @@ const map = L.map('map', {
   maxZoom: 19
 }).setView([54.7836, 9.4121], 2)
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+L.tileLayer.wms('https://sgx.geodatenzentrum.de/wms_basemapde?SERVICE=WMS&Request=GetCapabilities', {
+  layers: 'de_basemapde_web_raster_grau',
+  maxZoom: 19, 
+  attribution: '<a href="https://www.bkg.bund.de">GeoBasis-DE BKG</a> | <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>'
+}).addTo(map);
+
+/* L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map)
+}).addTo(map); */
 
 // Create an array of jsonPromises for fetching JSON data
 const jsonPromises = jsonUrls.map((url, index) =>
