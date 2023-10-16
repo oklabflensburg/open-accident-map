@@ -16,10 +16,10 @@ const circleMarkers = [];
 const geoJsonLayers = [];
 
 const style1 = {
-  fillColor: '#011936',
-  color: '#011936',
-  weight: 1,
-  opacity: .7,
+  fillColor: '#d1e4fd',
+  color: '#989898',
+  weight: 2,
+  opacity: .7
 };
 
 const style2 = {
@@ -167,14 +167,14 @@ const onEachFeatureFunctions = [
       // Check if there was a previously clicked layer
       if (currentClickedLayer) {
         // Reset the fill color of the previously clicked layer
-        currentClickedLayer.setStyle({ fillColor: '#011936' });
+        currentClickedLayer.setStyle({ fillColor: '#d1e4fd' });
       }
 
       // Set the fill color of the clicked layer
-      layer.setStyle({ fillColor: 'yellow' });
+      layer.setStyle({ fillColor: '#d1e4fd' });
 
       // Update the currently clicked layer
-        currentClickedLayer = layer;
+      currentClickedLayer = layer;
     });
   },
   (feature, layer, index) => {
