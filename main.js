@@ -17,9 +17,9 @@ const geoJsonLayers = [];
 
 const style1 = {
   fillColor: '#fff',
+  fillOpacity: .6,
   color: '#989898',
   weight: 2,
-  opacity: .7
 };
 
 const style2 = {
