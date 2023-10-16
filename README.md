@@ -1,7 +1,6 @@
 # Unfallkarte Deutschland
 
-Interaktive Karte von Unfällen mit Personenschaden der Statistischen Ämter des Bundes und der Länder in kombination mit den Verwaltungsgebieten des Bundesamtes für Kartographie und Geodäsie. Unfälle, bei denen nur Sachschaden entsteht, werden nicht dargestellt.
-
+> Map mit Verkehrsunfällen mit Personenschaden im Zeitraum 2016 - 2022 mit Daten der Statistischen Ämter des Bundes und der Länder sowie des BKG aktualisiert. Unfälle, bei denen nur Sachschaden entsteht, werden nicht dargestellt.
 
 ![Screenshot Unfallkarte](https://raw.githubusercontent.com/oklabflensburg/open-accident-map/main/screenshot_unfallkarte.jpg)
 
@@ -31,6 +30,21 @@ ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2
 
 
 ## Import Data from GeoJSON file
+
+To use the prefered names and tools run this lines
+
+```sh
+cd open-accident-map
+sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5432 < data/unfallorte_deutschland_schema.sql
+cd tools
+virtualenv venv
+source venv/local/bin/activate
+pip install -r requirements.txt
+for i in {16..22}; do python ./insert_accidents.py ../data/accidents_20$i.geojson; done
+deactivate
+```
+
+In case you dont want to use default import use this
 
 ```sh
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/vg250.geojson" -nln vg250
