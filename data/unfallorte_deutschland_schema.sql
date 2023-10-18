@@ -89,6 +89,13 @@ CREATE TABLE IF NOT EXISTS istsonstig (
   name VARCHAR NOT NULL
 );
 
+DROP TABLE IF EXISTS ustrzustan;
+
+CREATE TABLE IF NOT EXISTS ustrzustan (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL
+);
+
 
 -- ULAND Bundesland
 INSERT INTO uland(id, name) VALUES (1, 'Schleswig-Holstein');
@@ -135,6 +142,11 @@ INSERT INTO uwochentag(id, name) VALUES (7, 'Samstag');
 INSERT INTO ukategorie(id, name) VALUES (1, 'Unfall mit Getöteten');
 INSERT INTO ukategorie(id, name) VALUES (2, 'Unfall mit Schwerverletzten');
 INSERT INTO ukategorie(id, name) VALUES (3, 'Unfall mit Leichtverletzten');
+
+-- USTRZUSTAND Straßenzustand
+INSERT INTO ustrzustan(id, name) VALUES (0, 'trocken');
+INSERT INTO ustrzustan(id, name) VALUES (1, 'nass bzw. feucht');
+INSERT INTO ustrzustan(id, name) VALUES (2, 'winterglatt');
 
 -- UART Unfallart
 INSERT INTO uart(id, name) VALUES (1, 'Zusammenstoß mit anfahrendem/anhaltendem/ruhendem Fahrzeug');
