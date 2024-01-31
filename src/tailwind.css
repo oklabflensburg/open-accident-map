@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Mluvak';
+    font-family: 'Mluvka';
     src:
         url('./assets/fonts/MluvkaVF.woff') format('woff supports variations'),
         url('./assets/fonts/MluvkaVF.woff2') format('woff2-variations');
@@ -16,6 +16,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Mluvka", sans-serif;
+    font-variation-settings: "ital" 0; 
+    font-synthesis: none;
+    font-style: normal;
     letter-spacing: 1px;
 }
 
