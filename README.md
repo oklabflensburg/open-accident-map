@@ -1,6 +1,6 @@
 # Unfallkarte Deutschland
 
-> Map mit Verkehrsunfällen mit Personenschaden im Zeitraum 2016 - 2022 mit Daten der Statistischen Ämter des Bundes und der Länder sowie des BKG aktualisiert. Unfälle, bei denen nur Sachschaden entsteht, werden nicht dargestellt.
+> Map mit Verkehrsunfällen mit Personenschaden im Zeitraum 2016 - 2023 mit Daten der Statistischen Ämter des Bundes und der Länder sowie des BKG aktualisiert. Unfälle, bei denen nur Sachschaden entsteht, werden nicht dargestellt.
 
 ![Screenshot Unfallkarte](https://raw.githubusercontent.com/oklabflensburg/open-accident-map/main/screenshot_unfallkarte.jpg)
 
@@ -78,6 +78,7 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=54
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2020.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2021.geojson" -nln accidents -append
 ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2022.geojson" -nln accidents -append
+ogr2ogr -f "PostgreSQL" PG:"dbname=postgres user=postgres host=localhost port=5432 password=postgres" "data/accidents_2023.geojson" -nln accidents -append
 ```
 
 
@@ -97,30 +98,6 @@ ALTER TABLE accidents DROP COLUMN geometry;
 ```sql
 REINDEX INDEX accidents_wkb_geometry_geom_idx;
 REINDEX INDEX vg250_wkb_geometry_geom_idx;
-```
-
-
-## Insert Metadata
-
-Create schema and insert meta data
-
-```sh
-sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5432 < data/unfallorte_deutschland_schema.sql
-```
-
-
-## Prepare Application
-
-Clone repository and setup git lfs
-
-```sh
-sudo apt install nginx-full certbot python3 virtualenv
-git clone https://github.com/oklabflensburg/open-accident-map.git
-cd open-accident-map
-git lfs pull
-virtualenv venv
-. venv/bin/activate
-pip install -r requirements.txt
 ```
 
 
