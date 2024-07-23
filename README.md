@@ -56,13 +56,14 @@ ogr2ogr -f GeoJSON -s_srs Unfallorte_2023_LR_BasisDLM.prj -t_srs EPSG:4326 accid
 To use the prefered names and tools run this lines
 
 ```sh
+git clone https://github.com/oklabflensburg/open-accident-map.git
 cd open-accident-map
 sudo -i -Hu postgres psql -U postgres -h localhost -d postgres -p 5432 < data/unfallorte_deutschland_schema.sql
 cd tools
-virtualenv venv
-source venv/local/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-for i in {16..22}; do python ./insert_accidents.py ../data/accidents_20$i.geojson; done
+for i in {16..23}; do python3 ./insert_accidents.py ../data/accidents_20$i.geojson; done
 deactivate
 ```
 
@@ -129,9 +130,8 @@ Setup frontend webserver configuration for nginx
 
 ```sh
 server {
-    # listen 443 ssl http2;
-    # listen [::]:443 ssl http2;
-    server_name www.open-accident-map.de open-accident-map.de;
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
     charset uft-8;
 
@@ -139,12 +139,6 @@ server {
 
     root /opt/git/open-accident-map;
     index index.html;
-
-    listen 80;
-    ssl_certificate /etc/letsencrypt/live/open-accident-map.de/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/open-accident-map.de/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 ```
 
