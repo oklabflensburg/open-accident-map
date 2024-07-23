@@ -18,14 +18,36 @@ sudo chmod ugo+r /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
 sudo chmod go-w /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
 echo "deb [arch=amd64, signed-by=/etc/apt/trusted.gpg.d/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
 sudo apt update
-sudo apt install postgis postgresql-15-postgis-3
+sudo apt install postgresql-16 postgresql-16-postgis-3 postgresql-client-16
+
+```
+
+
+## Download Esri Shapefile from
+
+```
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2016_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2017_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2018_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2019_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2020_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2021_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2022_EPSG25832_Shape.zip
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2023_EPSG25832_Shape.zip
 ```
 
 
 ## Extract GeoJSON from Esri Shapefile
 
 ```sh
+ogr2ogr -f GeoJSON -s_srs Unfaelle_2016_LinRef.prj -t_srs EPSG:4326 accidents_2016.geojson Unfaelle_2016_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte2017_LinRef.prj -t_srs EPSG:4326 accidents_2017.geojson Unfallorte2017_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte2018_LinRef.prj -t_srs EPSG:4326 accidents_2018.geojson Unfallorte2018_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte2019_LinRef.prj -t_srs EPSG:4326 accidents_2019.geojson Unfallorte2019_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte2020_LinRef.prj -t_srs EPSG:4326 accidents_2020.geojson Unfallorte2020_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte2021_LinRef.prj -t_srs EPSG:4326 accidents_2021.geojson Unfallorte2021_LinRef.shp
 ogr2ogr -f GeoJSON -s_srs Unfallorte2022_LinRef.prj -t_srs EPSG:4326 accidents_2022.geojson Unfallorte2022_LinRef.shp
+ogr2ogr -f GeoJSON -s_srs Unfallorte_2023_LR_BasisDLM.prj -t_srs EPSG:4326 accidents_2023.geojson Unfallorte_2023_LR_BasisDLM.shp
 ```
 
 
