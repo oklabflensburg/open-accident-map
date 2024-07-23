@@ -232,4 +232,9 @@ CREATE INDEX IF NOT EXISTS accidents_ags_idx ON accidents (ags);
 
 -- GEOMETRY INDEX
 CREATE INDEX IF NOT EXISTS accidents_wkb_geometry_geom_idx ON accidents USING gist (wkb_geometry);
-CREATE INDEX IF NOT EXISTS vg250_wkb_geometry_geom_idx ON vg250 USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250gem_wkb_geometry_geom_idx ON vg250gem USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250vwg_wkb_geometry_geom_idx ON vg250vwg USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250krs_wkb_geometry_geom_idx ON vg250krs USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250lan_wkb_geometry_geom_idx ON vg250lan USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250rbz_wkb_geometry_geom_idx ON vg250rbz USING gist (wkb_geometry);
+CREATE INDEX IF NOT EXISTS vg250sta_wkb_geometry_geom_idx ON vg250sta USING gist (wkb_geometry);
