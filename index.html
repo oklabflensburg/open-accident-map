@@ -16,17 +16,84 @@
             <div class="w-full sm:w-8/12 md:w-7/12 lg:w-9/12 h-96 overflow-hidden" id="map"></div>
             <div class="w-full sm:w-4/12 md:w-5/12 lg:w-3/12 sm:overflow-scroll bg-gray-100" id="filter">
                 <div class="py-2 px-3">
-                    <h1 class="text-2xl md:text-3xl font-bold">Unfallkarte 2022</h1>
-                    <h2 class="text-xl md:text-2xl mb-2 md:mb-4">Stadt Flensburg</h2>
+                    <h1 class="text-2xl md:text-3xl font-bold">Unfallkarte 2023</h1>
+                    <h2 class="text-xl md:text-2xl mb-2 md:mb-4">Stadtplan für Flensburg</h2>
                 </div>
                 <div id="details"></div>
+                <form id="form" enctype="application/x-www-form-urlencoded">
+                    <div id="districtWrapper" class="m-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="district">Stadtteil auswählen</label>
+                        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline cursor-pointer" id="district" name="district">
+                            <option value="0">Alle Stadtteile</option>
+                            <option value="1">Altstadt</option>
+                            <option value="2">Neustadt</option>
+                            <option value="3">Nordstadt</option>
+                            <option value="4">Westliche Höhe</option>
+                            <option value="5">Friesischer Berg</option>
+                            <option value="6">Weiche</option>
+                            <option value="7">Südstadt</option>
+                            <option value="8">Sandberg</option>
+                            <option value="9">Jürgensby</option>
+                            <option value="10">Fruerlund</option>
+                            <option value="11">Mürwik</option>
+                            <option value="12">Engelsby</option>
+                            <option value="13">Tarup</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div id="utyp1Wrapper" class="m-4"></div>
+                    <hr>
+                    <div id="uartWrapper" class="m-4"></div>
+                    <hr>
+                    <div class="m-4">
+                        <span class="font-bold text-gray-500">Jahre</span>
+                    </div>
+                    <div class="m-4 flex flex-wrap">
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2016" type="checkbox">
+                            <span class="text-sm">2016</span>
+                        </label>
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2017" type="checkbox">
+                            <span class="text-sm">2017</span>
+                        </label>
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2018" type="checkbox">
+                            <span class="text-sm">2018</span>
+                        </label>
+                    </div>
+                    <div class="m-4 flex flex-wrap">
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2019" type="checkbox">
+                            <span class="text-sm">2019</span>
+                        </label>
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2020" type="checkbox">
+                            <span class="text-sm">2020</span>
+                        </label>
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2021" type="checkbox">
+                            <span class="text-sm">2021</span>
+                        </label>
+                    </div>
+                    <div class="m-4 flex flex-wrap">
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2022" type="checkbox">
+                            <span class="text-sm">2022</span>
+                        </label>
+                        <label class="md:w-1/3 block text-gray-500 font-bold cursor-pointer">
+                            <input class="mr-2 leading-tight" name="year" multiple="multiple" value="2023" type="checkbox">
+                            <span class="text-sm">2023</span>
+                        </label>
+                    </div>
+                </form>
                 <div class="pb-2 px-3">
                     <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Verkehrslenkung</h3>
                     <p class="font-mono mb-4 md:mb-8">Während einer kleinen Brainstorming Session ist diese interaktive webbasierte Karte mit den Daten des Bundesamtes für Kartographie und Geodäsie entstanden. Nach einigen Stunden der maschinellen Aufarbeitung und Betrachtung der Datensätze haben wir uns entschlossen, die Daten in eine Postgis Postgres Datenbank einzupflegen und zu indexieren. Unser Ziel ist es Entscheidungsträgern in Kommunen, Verwaltungen und auch privaten Unternehmen eine Datenbasierte Entscheidung anhand von Daten und Ereignissen zu treffen.</p>
                     <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Überlegungen</h3>
                     <p class="font-mono mb-4 md:mb-8">Wir haben uns mit folgenden Fragestellungen auseinandergesetzt, welche Straßen oder Kreuzungen sind besonders häufig von Unfällen betroffen? An welchen Orten häufen sich Verkehrsunfälle mit Todesfolge oder Schwerstverletzen? Welche Informationen werden der Allgemeinheit über <a class="text-blue-600 hover:text-blue-500 focus:text-blue:500" href="https://overpass-turbo.eu" target="_blank">Openstreetmap</a> angeboten?</p>
                     <h3 class="text-xl md:text-2xl mb-1 md:mb-3">Quellcode</h3>
-                    <p class="font-mono"><a class="text-blue-600 hover:text-blue-500 focus:text-blue:500" href="https://github.com/oklabflensburg/open-accident-map" target="_blank">GitHub</a></p>
+                    <p class="font-mono">Der aktuelle Entwicklungsstand kann auf <a class="text-blue-600 hover:text-blue-500 focus:text-blue:500" href="https://github.com/oklabflensburg/open-accident-map" target="_blank">GitHub</a> eingesehen werden und von jeder Kommune, Stadt oder Land kostenfrei und lizenzfrei genutzt und redeployed werden.</p>
                 </div>
             </div>
         </div>

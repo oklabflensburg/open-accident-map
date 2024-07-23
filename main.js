@@ -1,33 +1,36 @@
 // Define an array of GeoJSON file URLs in the desired order
 const jsonUrls = [ 
   './static/meta.json'
-];
+]
 
 // Define an array of GeoJSON file URLs in the desired order
 const geoJsonUrls = [
   './static/flensburg_stadtteile.geojson',
   './static/flensburg_details.geojson'
-];
+]
 
-let currentClickedLayer = null;
-let currentClickedMarker = null;
-let metaDataArray = null;
+const queryform = document.querySelector('#form')
 
-const circleMarkers = [];
-const geoJsonLayers = [];
+let currentClickedLayer = null
+let currentClickedMarker = null
+let metaDataArray = null
+let geojsonLayer = null
+
+const circleMarkers = []
+const geoJsonLayers = []
 
 const style1 = {
   fillColor: '#fff',
   fillOpacity: .6,
   color: '#989898',
   weight: 2,
-};
+}
 
 const style2 = {
-};
+}
 
 const style3 = {
-};
+}
 
 // Define different pointToLayer functions with an index parameter
 const pointToLayerFunctions = [
@@ -38,8 +41,8 @@ const pointToLayerFunctions = [
   },
   (feature, latlng, index) => {
     // Calculate the radius based on the current zoom level
-    const zoom = map.getZoom();
-    const radius = calculateRadius(zoom);
+    const zoom = map.getZoom()
+    const radius = calculateRadius(zoom)
 
     // Custom pointToLayer logic for the third GeoJSON layer
     const circleMarker = L.circleMarker(latlng, { 
@@ -47,29 +50,29 @@ const pointToLayerFunctions = [
       radius: radius,
       color: '#f95016',
       fillOpacity: 1
-    });
+    })
 
     const year = feature.properties.ujahr
-    const utyp1 = getMetaValue(metaDataArray.utyp1, feature.properties.utyp1);
+    const utyp1 = getMetaValue(metaDataArray.utyp1, feature.properties.utyp1)
 
     // Add a tooltip to the CircleMarker
-    const label = `${utyp1.name}, ${year}`;
+    const label = `${utyp1.name}, ${year}`
 
-    circleMarker.bindTooltip(label);
+    circleMarker.bindTooltip(label)
 
     // Add an onClick event handler to each CircleMarker
     circleMarker.on('click', function (e) {
-      const currentZoom = map.getZoom();
+      const currentZoom = map.getZoom()
 
       // Set minimum zoom level
-      let zoomView = 18;
+      let zoomView = 18
 
       if (zoomView < currentZoom) {
-        zoomView = currentZoom;
+        zoomView = currentZoom
       }
 
       // Center the map on the CircleMarker's location
-      map.setView(latlng, zoomView);
+      map.setView(latlng, zoomView)
 
       const detail = {
         ukategorie: getMetaValue(metaDataArray.ukategorie, e.target.feature.properties.ukategorie),
@@ -89,10 +92,10 @@ const pointToLayerFunctions = [
         istsonstig: getMetaValue(metaDataArray.istsonstig, e.target.feature.properties.istsonstig)
       }
 
-      let detailOutput = '';
+      let detailOutput = ''
 
       for (const key of Object.keys(detail)) {
-        const value = detail[key];
+        const value = detail[key]
 
         if (value !== undefined) {
           if (key === 'umonat') {
@@ -157,16 +160,16 @@ const pointToLayerFunctions = [
         }
       }
 
-      const element = document.querySelector('#details');
-      element.innerHTML = `<ul class="p-3 space-y-2 bg-gray-700 text-white mb-4 md:mb-8"> ${detailOutput}</ul>`;
+      const element = document.querySelector('#details')
+      element.innerHTML = `<ul class="p-3 space-y-2 bg-gray-700 text-white mb-4 md:mb-8"> ${detailOutput}</ul>`
 
       // Trigger click events on CircleMarkers in previous GeoJSON layers
       geoJsonLayers[index - 1].fire('click')
-    });
+    })
 
-    return circleMarker;
+    return circleMarker
   },
-];
+]
 
 // Define different onEachFeature functions with an index parameter
 const onEachFeatureFunctions = [
@@ -176,15 +179,15 @@ const onEachFeatureFunctions = [
       // Check if there was a previously clicked layer
       if (currentClickedLayer) {
         // Reset the fill color of the previously clicked layer
-        currentClickedLayer.setStyle({ fillColor: '#fff' });
+        currentClickedLayer.setStyle({ fillColor: '#fff' })
       }
 
       // Set the fill color of the clicked layer
-      layer.setStyle({ fillColor: '#d1e4fd' });
+      layer.setStyle({ fillColor: '#d1e4fd' })
 
       // Update the currently clicked layer
-      currentClickedLayer = layer;
-    });
+      currentClickedLayer = layer
+    })
   },
   (feature, layer, index) => {
     // Add a click event handler for each layer
@@ -192,91 +195,87 @@ const onEachFeatureFunctions = [
       // Check if there was a previously clicked marker
       if (currentClickedMarker) {
         // Reset the color of the previously clicked marker
-        currentClickedMarker.setStyle({ fillColor: '#f95016' });
+        currentClickedMarker.setStyle({ fillColor: '#f95016' })
       }
 
       // Set the fill color of the clicked marker
       layer.setStyle({ fillColor: '#00f' }); 
 
       // Update the currently clicked layer
-      currentClickedMarker = layer;
-    });
+      currentClickedMarker = layer
+    })
   },
   (feature, layer, index) => {
     // Custom logic for the third GeoJSON layer with index = 2
   },
-];
+]
 
-const styles = [style1, style2, style3];
+const styles = [style1, style2, style3]
 
 // Initialize map
 const map = L.map('map', {
   maxZoom: 19
 }).setView([54.7836, 9.4121], 2)
 
+
 L.tileLayer.wms('https://sgx.geodatenzentrum.de/wms_basemapde?SERVICE=WMS&Request=GetCapabilities', {
   layers: 'de_basemapde_web_raster_grau',
-  maxZoom: 19, 
-  attribution: '<a href="https://www.bkg.bund.de">GeoBasis-DE BKG</a> | <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>'
-}).addTo(map);
-
-/* L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map); */
+  maxZoom: 20,
+  attribution: '<a href="https://www.bkg.bund.de">© GeoBasis-DE / BKG 2024</a> | <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>'
+}).addTo(map)
 
 // Create an array of jsonPromises for fetching JSON data
 const jsonPromises = jsonUrls.map((url, index) =>
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      return data;
+      return data
     })
-);
+)
 
 // Create an array of geoJsonPromises for fetching GeoJSON data
 const geoJsonPromises = geoJsonUrls.map((url, index) =>
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      let geojsonLayer
+      // let geojsonLayer
 
       if (index === geoJsonUrls.length - 1) {
         geojsonLayer = L.geoJSON(data, {
           pointToLayer: (feature, latlng) => {
             // Call the corresponding pointToLayer function with the index parameter
-            return pointToLayerFunctions[index](feature, latlng, index);
+            return pointToLayerFunctions[index](feature, latlng, index)
           },
           onEachFeature: (feature, layer) => {
             // Call the corresponding onEachFeature function with the index parameter
-            onEachFeatureFunctions[index](feature, layer, index);
+            onEachFeatureFunctions[index](feature, layer, index)
           },
-        });
+        })
       } else {
         // For other layers, use the default onEachFeature function
         geojsonLayer = L.geoJSON(data, {
           style: styles[index],
           onEachFeature: (feature, layer) => {
             // Call the corresponding onEachFeature function with the index parameter
-            onEachFeatureFunctions[index](feature, layer, index);
+            onEachFeatureFunctions[index](feature, layer, index)
           },
-        });
+        })
       }
 
       // Store the GeoJSON layer in the geoJsonLayers array
-      geoJsonLayers.push(geojsonLayer);
+      geoJsonLayers.push(geojsonLayer)
 
-      return geojsonLayer;
+      return geojsonLayer
     })
-);
+)
 
 // Define a click event handler
 function handleLayerClick(event) {
   // Perform your custom action here, using event properties
-  console.log('Click event:', event);
+  console.log('Click event:', event)
 
   // Example: Change the style of the clicked layer
-  event.target.setStyle({ fillColor: 'red' });
+  event.target.setStyle({ fillColor: 'red' })
 }
 
 // Use Promise.all to wait for all geoJsonPromises to resolve
@@ -285,14 +284,16 @@ Promise.all(jsonPromises)
     let tmpData = data
 
     while (Array.isArray(tmpData) && tmpData.length === 1) {
-      tmpData = tmpData[0];
+      tmpData = tmpData[0]
     }
 
-    metaDataArray = tmpData;
+    metaDataArray = tmpData
+    createSelectElement('utyp1', 'utyp1Wrapper', metaDataArray['utyp1'], 'Unfall Typ auswählen')
+    createSelectElement('uart', 'uartWrapper', metaDataArray['uart'], 'Unfall Hergang auswählen')
   })
   .catch((error) => {
-    console.error('Error fetching GeoJSON data:', error);
-  });
+    console.error('Error fetching GeoJSON data:', error)
+  })
 
 // Use Promise.all to wait for all geoJsonPromises to resolve
 Promise.all(geoJsonPromises)
@@ -301,45 +302,76 @@ Promise.all(geoJsonPromises)
     layers[1].addTo(map)
 
     // Calculate the bounds based on all GeoJSON layers
-    const bounds = L.featureGroup(layers).getBounds();
+    const bounds = L.featureGroup(layers).getBounds()
 
-    const center = bounds.getCenter();
-    const newLatitude = center.lat + 0.01;
-    const newCenter = L.latLng(newLatitude, center.lng);
+    const center = bounds.getCenter()
+    const newLatitude = center.lat + 0.01
+    const newCenter = L.latLng(newLatitude, center.lng)
 
-    map.setView(newCenter, 13);
+    map.setView(newCenter, 13)
 
     // Event listener to update circle marker radius when zoom changes
     map.on('zoomend', function () {
-      const zoom = map.getZoom();
+      const zoom = map.getZoom()
 
       layers[1].eachLayer(function (layer) {
-        const radius = calculateRadius(zoom);
+        const radius = calculateRadius(zoom)
 
         layer.setStyle({ radius: radius }); 
       }); 
-    });
+    })
 
     // Create a LayerGroup and add your layers to it
-    const layerGroup = L.layerGroup(...layers);
+    const layerGroup = L.layerGroup(...layers)
 
     // Add a click event listener to the LayerGroup
-    layerGroup.on('click', handleLayerClick);
+    layerGroup.on('click', handleLayerClick)
   })
   .catch((error) => {
-    console.error('Error fetching GeoJSON data:', error);
-  });
+    console.error('Error fetching GeoJSON data:', error)
+  })
 
 function getMetaValue(array, property) {
-  return array.find((item) => item.id === removeLeadingZero(property));
+  return array.find((item) => item.id === removeLeadingZero(property))
 }
 
 function removeLeadingZero(inputString) {
   if (inputString !== null && inputString.startsWith('0')) {
-    return parseInt(inputString.substring(1));
+    return parseInt(inputString.substring(1))
   }
 
-  return parseInt(inputString);
+  return parseInt(inputString)
+}
+
+// Create label element and select element with options
+function createSelectElement(id, target, options, label) {
+  const labelElement = document.createElement('label')
+  labelElement.classList = 'block text-gray-700 text-sm font-bold mb-2'
+  labelElement.setAttribute('for', id)
+  labelElement.textContent = label
+
+  const selectElement = document.createElement('select')
+  selectElement.classList = 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline cursor-pointer'
+  selectElement.setAttribute('name', id)
+  selectElement.setAttribute('id', id)
+
+  // Add an extra option element to unselect all
+  const optionElement = document.createElement('option')
+  optionElement.value = 0
+  optionElement.textContent = 'Keine Auswahl'
+  selectElement.appendChild(optionElement)
+
+  // Loop through the options array and create option elements
+  options.forEach(option => {
+    const optionElement = document.createElement('option')
+    optionElement.value = option['id']
+    optionElement.textContent = option['name']
+    selectElement.appendChild(optionElement)
+  })
+
+  // Append the select element to the DOM
+  document.querySelector(`#${target}`).append(labelElement)
+  document.querySelector(`#${target}`).append(selectElement)
 }
 
 function calculateRadius(zoom) {
@@ -356,4 +388,21 @@ function calculateRadius(zoom) {
   }
 
   return value
+}
+
+if (queryform.length) {
+  queryform.addEventListener('change', (e) => {
+    e.preventDefault()
+
+    const data = new FormData(queryform)
+    const districtId = parseInt(data.get('district'))
+    const year = data.getAll('year')
+    const utyp1 = data.get('utyp1')
+    const uart = data.get('uart')
+
+    console.log(geojsonLayer)
+    geojsonLayer
+
+    // renderPromise(dataObject, districtId, onlyFellings)
+  })
 }
