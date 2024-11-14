@@ -10,16 +10,50 @@
 Install system dependencies and packages
 
 ```
-sudo apt install gnupg2 gdal-bin git git-lfs
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > postgresql-keyring.gpg
-sudo mv postgresql-keyring.gpg /etc/apt/trusted.gpg.d/
-sudo chown root:root /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
-sudo chmod ugo+r /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
-sudo chmod go-w /etc/apt/trusted.gpg.d/postgresql-keyring.gpg
-echo "deb [arch=amd64, signed-by=/etc/apt/trusted.gpg.d/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
 sudo apt update
-sudo apt install postgresql-16 postgresql-16-postgis-3 postgresql-client-16
+sudo apt install wget
+sudo apt install git git-lfs
+sudo apt install python3 python3-pip python3-venv
+sudo apt install postgresql-16 postgresql-postgis gdal-bin
+```
 
+
+## Download and import data
+
+Since November 2024, new table names and structures are used.
+
+```sh
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2023_EPSG25832_Shape.zip
+unzip Unfallorte2023_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs shp/Unfallorte_2023_LR_BasisDLM.prj -t_srs EPSG:4326 shp/Unfallorte_2023_LR_BasisDLM.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2022_EPSG25832_Shape.zip
+unzip Unfallorte2022_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs shp/Unfallorte2022_LinRef.prj -t_srs EPSG:4326 shp/Unfallorte2022_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2021_EPSG25832_Shape.zip
+unzip Unfallorte2021_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2021_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2021_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2020_EPSG25832_Shape.zip
+unzip Unfallorte2020_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2020_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2020_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2019_EPSG25832_Shape.zip
+unzip Unfallorte2019_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2019_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2019_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2018_EPSG25832_Shape.zip
+unzip Unfallorte2018_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2018_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2018_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2017_EPSG25832_Shape.zip
+unzip Unfallorte2017_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2017_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2017_LinRef.shp
+
+wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2016_EPSG25832_Shape.zip
+unzip Unfallorte2016_EPSG25832_Shape.zip
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfaelle_2016_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfaelle_2016_LinRef.shp
 ```
 
 
