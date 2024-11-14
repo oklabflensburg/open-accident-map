@@ -5,6 +5,13 @@ venv/
 .DS_Store
 .env
 .idea
+*.cpg
+*.dbf
+*.prj
+*.sbn
+*.sbx
+*.shp
+*.shx
 *.zip
 *.tgz
 *.suo
