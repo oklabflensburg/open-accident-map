@@ -33,7 +33,7 @@ ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -l
 
 wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2021_EPSG25832_Shape.zip
 unzip Unfallorte2021_EPSG25832_Shape.zip
-ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Shapefile/Unfallorte2021_LinRef.prj -t_srs EPSG:4326 Shapefile/Unfallorte2021_LinRef.shp
+ogr2ogr -f "PostgreSQL" PG:"host=localhost port=5432 dbname=oklab user=oklab" -lco GEOMETRY_NAME=geom -lco SPATIAL_INDEX=GIST -lco PRECISION=YES -nlt POINT -append -nln de_accident_points -s_srs Unfallorte202_EPSG25832_Shape/shapefile/Unfallorte_2021_LR_BasisDLM.prj -t_srs EPSG:4326 Unfallorte202_EPSG25832_Shape/shapefile/Unfallorte_2021_LR_BasisDLM.shp
 
 wget https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2020_EPSG25832_Shape.zip
 unzip Unfallorte2020_EPSG25832_Shape.zip
